@@ -1,15 +1,20 @@
 # Import Statement
-import smtplib, ssl
-import os
 import requests
 from send_email import send_email
 
 # Storing the news API key
 api_key = "82d97b1654a94571b989e207c0362d52"
 
+# Generating News Topic
+topic = "OpenAI"
+
 # Storing the url, the query to pass to the news API
-url = "https://newsapi.org/v2/everything?q=tesla&from=2024-04-23&\
-       sortBy=publishedAt&apiKey=82d97b1654a94571b989e207c0362d52"
+url =  "https://newsapi.org/v2/everything?" \
+       f"q={topic}&" \
+       "from=2024-04-23&" \
+       "sortBy=publishedAt&" \
+       "language=en" \
+       "&apiKey=82d97b1654a94571b989e207c0362d52"
 
 # Making a request to the news API
 request = requests.get(url)
@@ -21,10 +26,10 @@ content = request.json()
 body = "Subject: Today's News\n"
 
 # Retrieving only the titles and descriptions of each articles stored in the 
-# JSON response
-for i in content["articles"]:
+# JSON response 
+for i in content["articles"][:20]:
        # If the article title is NOT None (article exists)..
-       if i["title"] is not None:
+       if i["title"] and i["description"] is not None:
               # appending the article title, description, and link to the message str
               body = body + "Title: " + i["title"] + "\n" + "Description: " + \
                      i["description"] + "\n" + "Link: " + i["url"] + 2*"\n"
